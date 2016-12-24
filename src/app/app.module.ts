@@ -43,7 +43,7 @@ import { AddCustomerPage } from '../pages/add-customer/add-customer';
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    { provide: 'API_URL', useValue: 'http://localhost:3000' }
+    { provide: 'API_URL', useValue: 'http://192.168.200.34:3000' }
   ]
 })
 export class AppModule {}

@@ -7,6 +7,8 @@ import {
 } from 'ionic-angular';
 import { Customer } from '../../providers/customer';
 
+import { Camera, CameraOptions } from 'ionic-native';
+
 @Component({
   selector: 'page-add-customer',
   templateUrl: 'add-customer.html',
@@ -92,6 +94,36 @@ export class AddCustomerPage {
       });
       alert.present();
     }
+  }
+
+  takePicture() {
+    let options: CameraOptions;
+    options = {
+      quality: 60,
+      sourceType: 1,
+      destinationType: 0
+    }
+    Camera.getPicture(options).then((imageData) => {
+      this.imageData = imageData;
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+      // error
+    });
+  }
+
+  browsePicture() {
+    let options: CameraOptions;
+    options = {
+      quality: 60,
+      sourceType: 0,
+      destinationType: 0
+    }
+    Camera.getPicture(options).then((imageData) => {
+      this.imageData = imageData;
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+        // error
+    });
   }
 
 }
