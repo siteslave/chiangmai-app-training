@@ -51,6 +51,7 @@ export class MainPage {
     loader.present();
     this.customerProvider.getCustomers(this.token)
       .then((res: any) => {
+        this.customers = [];
         let data = res.rows;
         data.forEach((v: any) => {
             let image = v.image ? `data:image/jpeg;base64,${v.image}` : null;

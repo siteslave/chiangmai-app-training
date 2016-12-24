@@ -102,4 +102,49 @@ export class Customer {
     });
   }
 
+  detail(token: string, customerId) {
+    return new Promise((resolve, reject) => {
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      });
+      let options = new RequestOptions({ headers: headers });
+      this.http.get(`${this.url}/customers/detail/${customerId}`, options)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data)
+        }, err => {
+          reject(err)
+        });
+    });
+  }
+
+  updateCustomer(token: string, customer: any) {
+    return new Promise((resolve, reject) => {
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      });
+      let options = new RequestOptions({ headers: headers });
+      let body = {
+        customerId: customer.id,
+        firstName: customer.first_name,
+        lastName: customer.last_name,
+        sex: customer.sex,
+        customerTypeId: customer.customer_type_id,
+        telephone: customer.telephone,
+        email: customer.email,
+        image: customer.image
+      };
+
+      this.http.put(`${this.url}/customers`, body, options)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data)
+        }, err => {
+          reject(err)
+        });
+    });
+  }
+
 }

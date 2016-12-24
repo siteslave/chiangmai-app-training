@@ -43,6 +43,8 @@ export class AddCustomerPage {
       { id: 1, name: 'ชาย' },
       { id: 2, name: 'หญิง' }
     ];
+
+    this.customerId = this.navParams.get('id');
   }
 
   ionViewWillEnter() {
@@ -55,7 +57,26 @@ export class AddCustomerPage {
     this.customerProvider.getGroups(this.token)
       .then((data: any) => {
         this.groups = data.rows;
-        loading.dismiss();
+        if (this.customerId) {
+          this.customerProvider.detail(this.token, this.customerId)
+            .then((data: any) => {
+              loading.dismiss();
+              this.imageData = data.customer.image;
+              this.base64Image = data.customer.image ?
+                'data:image/jpeg;base64,' + data.customer.image : null;
+              this.firstName = data.customer.first_name;
+              this.lastName = data.customer.last_name;
+              this.sex = data.customer.sex;
+              this.customerTypeId = data.customer.customer_type_id;
+              this.email = data.customer.email;
+              this.telephone = data.customer.telephone;
+            }, (error) => {
+              loading.dismiss();
+              console.error(error);
+            });
+        } else {
+          loading.dismiss();
+        }
       });
   }  
 
@@ -77,14 +98,22 @@ export class AddCustomerPage {
         image: this.imageData
       };
 
-      this.customerProvider.saveCustomer(this.token, customer)
-        .then((data: any) => {
-          loading.dismiss();
-          this.navCtrl.pop();
-        }, (error) => {
-          loading.dismiss();
-          console.error(error);
-        });
+      let promise;
+
+      if (this.customerId) {
+        customer.id = this.customerId;
+        promise = this.customerProvider.updateCustomer(this.token, customer);
+      } else {
+        promise = this.customerProvider.saveCustomer(this.token, customer);
+      }
+      
+      promise.then((data: any) => {
+        loading.dismiss();
+        this.navCtrl.pop();
+      }, (error) => {
+        loading.dismiss();
+        console.error(error);
+      });
     } else {
       loading.dismiss();
       let alert = this.alertCtrl.create({
