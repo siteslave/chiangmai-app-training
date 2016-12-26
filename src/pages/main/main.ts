@@ -146,7 +146,9 @@ export class MainPage {
         {
           text: 'ดู/กำหนด แผนที่',
           icon: !this.platform.is('ios') ? 'map': null,
-          handler: () => { }
+          handler: () => { 
+            this.navCtrl.push(MapPage, { id: customer.id });
+          }
         },
         {
           text: 'โทร',
