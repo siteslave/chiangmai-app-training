@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  Events,
+  App,
   NavController,
   NavParams,
   LoadingController,
@@ -12,6 +12,7 @@ import {
 import { MapPage } from '../map/map';
 import { Customer } from '../../providers/customer';
 import { AddCustomerPage } from '../add-customer/add-customer';
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-main',
@@ -27,7 +28,7 @@ export class MainPage {
     public navParams: NavParams,
     public customerProvider: Customer,
     public loadingCtrl: LoadingController,
-    public events: Events,
+    public app: App,
     public actionSheetCtrl: ActionSheetController,
     public platform: Platform,
     public alertCtrl: AlertController
@@ -40,7 +41,9 @@ export class MainPage {
   }  
   
   logout() {
-    this.events.publish('logout');
+    localStorage.removeItem('token');
+    let nav = this.app.getRootNav();
+    nav.setRoot(LoginPage);
   }
 
   ionViewWillEnter() {
